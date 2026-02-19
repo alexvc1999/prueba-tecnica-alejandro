@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import { Product, Category } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
+import Link from "next/link";
 
 export default function PanelPage() {
   const { language } = useLanguage();
@@ -30,7 +31,7 @@ export default function PanelPage() {
 
   const getCategoryName = (categoryId: string) => {
     const found = categories.find((c) => c.id === categoryId);
-    return found ? found.name[language] : "-";
+    return found ? found.name[language as keyof typeof found.name] : "-";
   };
 
   return (
@@ -46,9 +47,12 @@ export default function PanelPage() {
           </div>
 
           <div className="flex flex-row w-auto gap-4">
-            <button className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all text-center">
+            <Link
+              href="/panel/create"
+              className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all text-center"
+            >
               {language === "es" ? "+ Nuevo" : "+ New"}
-            </button>
+            </Link>
           </div>
         </header>
 
@@ -77,7 +81,7 @@ export default function PanelPage() {
                   className="hover:bg-slate-50 transition-colors"
                 >
                   <td className="px-6 py-4 text-sm font-semibold text-slate-900">
-                    {product.name[language]}
+                    {product.name[language as keyof typeof product.name]}
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">
                     {getCategoryName(product.categoryId)}
