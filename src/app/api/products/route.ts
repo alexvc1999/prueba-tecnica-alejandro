@@ -41,3 +41,15 @@ export async function DELETE(request: Request) {
   }
   return NextResponse.json({ error: "No encontrado" }, { status: 404 });
 }
+
+export async function PUT(request: Request) {
+  const body = await request.json();
+  const { id, name, price, categoryId } = body;
+
+  const index = products.findIndex((p) => p.id === id);
+  if (index !== -1) {
+    products[index] = { id, name, price, categoryId };
+    return NextResponse.json(products[index]);
+  }
+  return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+}

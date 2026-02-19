@@ -102,9 +102,12 @@ export default function PanelPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm">
                     <div className="flex justify-end gap-4">
-                      <button className="px-5 py-2 font-bold text-blue-500 bg-blue-50 hover:text-blue-700 hover:bg-blue-100 rounded-lg transition-all">
+                      <Link
+                        href={`/panel/edit/${product.id}`}
+                        className="px-5 py-2 font-bold text-blue-500 bg-blue-50 hover:text-blue-700 hover:bg-blue-100 rounded-lg transition-all"
+                      >
                         {language === "es" ? "Editar" : "Edit"}
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(product.id)}
                         className="px-5 py-2 font-bold text-red-500 bg-red-50 hover:text-red-700 hover:bg-red-100 rounded-lg transition-all"
