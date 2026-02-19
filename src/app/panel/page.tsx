@@ -11,27 +11,38 @@ export default function PanelPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const fetchData = async () => {
+    try {
+      const [prodRes, catRes] = await Promise.all([
+        fetch("/api/products"),
+        fetch("/api/categories"),
+      ]);
+
+      setProducts(await prodRes.json());
+      setCategories(await catRes.json());
+    } catch (err) {
+      console.error("Error al cargar datos:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [prodRes, catRes] = await Promise.all([
-          fetch("/api/products"),
-          fetch("/api/categories"),
-        ]);
-
-        setProducts(await prodRes.json());
-        setCategories(await catRes.json());
-      } catch (err) {
-        console.error("Error al cargar datos:", err);
-      }
-    };
-
     fetchData();
   }, []);
 
   const getCategoryName = (categoryId: string) => {
     const found = categories.find((c) => c.id === categoryId);
     return found ? found.name[language as keyof typeof found.name] : "-";
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm(language === "es" ? "¿Eliminar producto?" : "Delete product?"))
+      return;
+    await fetch("/api/products", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    fetchData();
   };
 
   return (
@@ -94,7 +105,10 @@ export default function PanelPage() {
                       <button className="px-5 py-2 font-bold text-blue-500 bg-blue-50 hover:text-blue-700 hover:bg-blue-100 rounded-lg transition-all">
                         {language === "es" ? "Editar" : "Edit"}
                       </button>
-                      <button className="px-5 py-2 font-bold text-red-500 bg-red-50 hover:text-red-700 hover:bg-red-100 rounded-lg transition-all">
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        className="px-5 py-2 font-bold text-red-500 bg-red-50 hover:text-red-700 hover:bg-red-100 rounded-lg transition-all"
+                      >
                         {language === "es" ? "Eliminar" : "Delete"}
                       </button>
                     </div>
