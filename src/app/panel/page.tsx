@@ -3,8 +3,10 @@
 import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import { Product, Category } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PanelPage() {
+  const { language } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -28,7 +30,7 @@ export default function PanelPage() {
 
   const getCategoryName = (categoryId: string) => {
     const found = categories.find((c) => c.id === categoryId);
-    return found ? found.name.es : "-";
+    return found ? found.name[language] : "-";
   };
 
   return (
@@ -38,12 +40,14 @@ export default function PanelPage() {
       <main className="p-8 max-w-6xl mx-auto">
         <header className="flex flex-row justify-between items-start gap-4 mb-10">
           <div>
-            <h1 className="text-3xl font-bold">Catálogo</h1>
+            <h1 className="text-3xl font-bold">
+              {language === "es" ? "Catálogo" : "Catalog"}
+            </h1>
           </div>
 
           <div className="flex flex-row w-auto gap-4">
             <button className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all text-center">
-              + Nuevo
+              {language === "es" ? "+ Nuevo" : "+ New"}
             </button>
           </div>
         </header>
@@ -52,10 +56,18 @@ export default function PanelPage() {
           <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50 text-slate-500 text-xs font-bold">
               <tr>
-                <th className="px-6 py-4 text-left">PRODUCTO</th>
-                <th className="px-6 py-4 text-left">CATEGORIA</th>
-                <th className="px-6 py-4 text-left">PRECIO</th>
-                <th className="px-6 py-4 text-right">ACCIONES</th>
+                <th className="px-6 py-4 text-left">
+                  {language === "es" ? "PRODUCTO" : "PRODUCT"}
+                </th>
+                <th className="px-6 py-4 text-left">
+                  {language === "es" ? "CATEGORIA" : "CATEGORY"}
+                </th>
+                <th className="px-6 py-4 text-left">
+                  {language === "es" ? "PRECIO" : "PRICE"}
+                </th>
+                <th className="px-6 py-4 text-right">
+                  {language === "es" ? "ACCIONES" : "ACTIONS"}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
@@ -65,7 +77,7 @@ export default function PanelPage() {
                   className="hover:bg-slate-50 transition-colors"
                 >
                   <td className="px-6 py-4 text-sm font-semibold text-slate-900">
-                    {product.name.es}
+                    {product.name[language]}
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">
                     {getCategoryName(product.categoryId)}
@@ -76,10 +88,10 @@ export default function PanelPage() {
                   <td className="px-6 py-4 text-right text-sm">
                     <div className="flex justify-end gap-4">
                       <button className="px-5 py-2 font-bold text-blue-500 bg-blue-50 hover:text-blue-700 hover:bg-blue-100 rounded-lg transition-all">
-                        Editar
+                        {language === "es" ? "Editar" : "Edit"}
                       </button>
                       <button className="px-5 py-2 font-bold text-red-500 bg-red-50 hover:text-red-700 hover:bg-red-100 rounded-lg transition-all">
-                        Eliminar
+                        {language === "es" ? "Eliminar" : "Delete"}
                       </button>
                     </div>
                   </td>
